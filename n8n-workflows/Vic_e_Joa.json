@@ -1,5 +1,5 @@
 {
-  "name": "Vic & Joa",
+  "name": "Vic & Joa - com memoria",
   "nodes": [
     {
       "parameters": {
@@ -9,10 +9,7 @@
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
-      "position": [
-        -320,
-        0
-      ],
+      "position": [-720, 0],
       "id": "fc0739bc-72b1-458b-9c90-11fcffe3de2f",
       "name": "Webhook",
       "webhookId": "ac27fc12-1c33-4c7a-830c-43fbab16021f"
@@ -52,12 +49,55 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
-      "position": [
-        0,
-        0
-      ],
+      "position": [-480, 0],
       "id": "450bc3e7-7171-4a7f-85c8-9dfe45e9fbf2",
       "name": "If"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "=SEU_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Página1",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "TELEFONE",
+              "lookupValue": "={{ $('Webhook').item.json.body.sender.replace('@s.whatsapp.net', '').replace(/(\\d{2})(\\d{2})(\\d{5})(\\d{4})/, '+$1 ($2) $3-$4') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-240, 0],
+      "id": "b1a1a111-1111-4111-8111-111111111111",
+      "name": "Buscar Historico",
+      "credentials": {
+        "googleApi": {
+          "id": "5Wt1tda55p4nK2Ti",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\nconst ultimas = rows.slice(-6);\n\nconst historico = [];\nfor (const item of ultimas) {\n  if (item.json.MENSAGEM) historico.push({ role: \"user\", content: String(item.json.MENSAGEM) });\n  if (item.json[\"REPOSTA DO BOT\"]) historico.push({ role: \"assistant\", content: String(item.json[\"REPOSTA DO BOT\"]) });\n}\n\nconst mensagemAtual = $('Webhook').first().json.body.data.message.conversation\n  || $('Webhook').first().json.body.data.message.extendedTextMessage.text;\n\nconst systemPrompt = `Voce e o Camarao, atendente virtual do restaurante Vic e Jao! Seja simpatico, informal e animado. Use SEMPRE formatacao WhatsApp: *negrito* nos nomes dos pratos e precos. Use emojis relevantes. Separe informacoes com quebras de linha.\n\nCARDAPIO:\n*1. Camarao na manteiga* - R$45 🦐\n*2. Lagosta grelhada* - R$89 🦞\n*3. Casquinha de siri* - R$32 🦀\n*4. Polvo ao alho e oleo* - R$67 🐙\n*5. File de peixe grelhado* - R$38 🐟\n*6. Lula a milanesa* - R$42 🦑\n*7. Mix de frutos do mar* - R$72 🍤\n*8. Moqueca de camarao* - R$58 🥘\n*9. Macarrao com frutos do mar* - R$48 🍝\n*10. Salada de polvo com camarao* - R$35 🥗\n\nFLUXO:\n1. Cliente escolhe o prato\n2. Pergunte delivery ou retirada presencial\n3. Se delivery: pergunte o endereco. Assim que o cliente informar, confirme de forma breve (ex: 'Show! Delivery confirmado para [endereco] 🛵') e siga pro pagamento, SEM repetir o cardapio\n4. Se retirada: informe Rua do Mar, 123 - Centro e confirme, sem repetir o cardapio\n5. Confirme o pedido com valor total\n6. Pergunte pagamento: Pix ou cartao na entrega\n7. Se Pix: gere uma chave de 8 digitos aleatorios e aguarde confirmacao\n8. Quando o cliente disser que pagou (ex: 'paguei', 'fiz o pix', 'ja mandei'): confirme o pagamento recebido e diga que o pedido esta a caminho em 40 minutos. NUNCA volte a mostrar o cardapio nesse ponto\n9. Se cartao: diga que o motoboy leva a maquininha\n\nHORARIO: terca a domingo, 18h as 23h\n\nIMPORTANTE: Voce tem acesso ao historico da conversa abaixo. Use-o para saber em que etapa do atendimento o cliente esta. NUNCA repita o cardapio inteiro se o cliente ja escolheu um prato. Seja direto, objetivo e nunca repita informacoes ja ditas.`;\n\nconst messages = [\n  { role: \"system\", content: systemPrompt },\n  ...historico,\n  { role: \"user\", content: mensagemAtual }\n];\n\nreturn [{ json: { messages } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "id": "b2a2a222-2222-4222-8222-222222222222",
+      "name": "Montar Mensagens"
     },
     {
       "parameters": {
@@ -67,15 +107,12 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Voce e o Camarao, atendente virtual do restaurante Vic e Jao! Seja simpatico, informal e animado. Use SEMPRE formatacao WhatsApp: *negrito* nos nomes dos pratos e precos. Use emojis relevantes. Separe informacoes com quebras de linha.\\n\\nCARDAPIO:\\n*1. Camarao na manteiga* - R$45 🦐\\n*2. Lagosta grelhada* - R$89 🦞\\n*3. Casquinha de siri* - R$32 🦀\\n*4. Polvo ao alho e oleo* - R$67 🐙\\n*5. File de peixe grelhado* - R$38 🐟\\n*6. Lula a milanesa* - R$42 🦑\\n*7. Mix de frutos do mar* - R$72 🍤\\n*8. Moqueca de camarao* - R$58 🥘\\n*9. Macarrao com frutos do mar* - R$48 🍝\\n*10. Salada de polvo com camarao* - R$35 🥗\\n\\nFLUXO:\\n1. Cliente escolhe o prato\\n2. Pergunte delivery ou retirada presencial\\n3. Se delivery: pergunte o endereco\\n4. Se retirada: informe Rua do Mar, 123 - Centro\\n5. Confirme o pedido com valor total\\n6. Pergunte pagamento: Pix ou cartao na entrega\\n7. Se Pix: gere uma chave de 8 digitos aleatorios e aguarde confirmacao\\n8. Quando cliente disser que pagou: confirme e diga que esta a caminho em 40 minutos\\n9. Se cartao: diga que motoboy leva a maquininha\\n\\nHORARIO: terca a domingo 18h as 23h\\n\\nIMPORTANTE: Se o cliente ja escolheu um prato ou ja viu o cardapio NAO repita o cardapio inteiro. Seja direto e objetivo. Nunca repita informacoes ja ditas na conversa.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"={{ $('Webhook').item.json.body.data.message.conversation || $('Webhook').item.json.body.data.message.extendedTextMessage.text }}\"\n    }\n  ]\n}",
+        "jsonBody": "={{ JSON.stringify({ model: \"llama-3.3-70b-versatile\", messages: $json.messages }) }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        352,
-        -16
-      ],
+      "position": [240, 0],
       "id": "d2c8cdee-82cf-4fe6-803a-c9c3f9ec5aa5",
       "name": "HTTP Request",
       "credentials": {
@@ -100,7 +137,7 @@
           "parameters": [
             {
               "name": "number",
-              "value": "SEU_NUMERO@s.whatsapp.net"
+              "value": "={{ $('Webhook').item.json.body.sender }}"
             },
             {
               "name": "textMessage.text",
@@ -112,10 +149,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        768,
-        -464
-      ],
+      "position": [480, -240],
       "id": "9ba09d92-40d2-4391-b14a-cd202559ecf7",
       "name": "HTTP Request1",
       "credentials": {
@@ -145,7 +179,7 @@
             "DATA E HORA": "={{ new Date().toLocaleString('pt-BR', {timeZone: 'America/Belem', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}",
             "TELEFONE": "={{ $('Webhook').item.json.body.sender.replace('@s.whatsapp.net', '').replace(/(\\d{2})(\\d{2})(\\d{5})(\\d{4})/, '+$1 ($2) $3-$4') }}",
             "MENSAGEM": "={{ $('Webhook').item.json.body.data.message.extendedTextMessage.text }}",
-            "REPOSTA DO BOT": "={{ $json.choices[0].message.content }}"
+            "REPOSTA DO BOT": "={{ $('HTTP Request').item.json.choices[0].message.content }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -193,10 +227,7 @@
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
-      "position": [
-        864,
-        240
-      ],
+      "position": [480, 240],
       "id": "36edd074-c289-4cd5-b6a0-63a9014aab76",
       "name": "Append row in sheet",
       "credentials": {
@@ -221,6 +252,28 @@
       ]
     },
     "If": {
+      "main": [
+        [
+          {
+            "node": "Buscar Historico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Historico": {
+      "main": [
+        [
+          {
+            "node": "Montar Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Mensagens": {
       "main": [
         [
           {
@@ -253,7 +306,6 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "cefe422c-970e-4fb9-8173-ba8625839cd2",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "cacc701ec717560c07fbed8ba5bfb835e74e3e2dfc0d5d4b0f0c476236f2f358"
