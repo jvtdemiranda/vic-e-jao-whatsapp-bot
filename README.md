@@ -1,5 +1,7 @@
 # Vic & Joa - Chatbot de Atendimento via WhatsApp com IA
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg) ![n8n](https://img.shields.io/badge/n8n-workflow-orange.svg) ![WhatsApp](https://img.shields.io/badge/WhatsApp-Evolution%20API-25D366.svg)
+
 Chatbot de atendimento automatizado para restaurante, simulando o fluxo completo de pedidos via WhatsApp: cardápio, escolha de prato, delivery ou retirada, forma de pagamento e confirmação — tudo conduzido por IA, com memória de conversa.
 
 ## Demonstração
@@ -67,3 +69,7 @@ npx n8n start
 ## Autor
 
 João Vitor Torres de Miranda
+
+## Licença
+
+Distribuído sob a licença MIT. Veja [LICENSE](./LICENSE) para mais detalhes.
