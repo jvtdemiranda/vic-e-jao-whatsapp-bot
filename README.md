@@ -1,14 +1,23 @@
-# Vic & Joa - Chatbot de Atendimento via WhatsApp com IA
+# 🍽️ Vic & Jão — Chatbot de Atendimento via WhatsApp com IA
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![n8n](https://img.shields.io/badge/n8n-workflow-orange.svg) ![WhatsApp](https://img.shields.io/badge/WhatsApp-Evolution%20API-25D366.svg)
 
-Chatbot de atendimento automatizado para restaurante, simulando o fluxo completo de pedidos via WhatsApp: cardápio, escolha de prato, delivery ou retirada, forma de pagamento e confirmação — tudo conduzido por IA, com memória de conversa.
+## 💡 Qual problema resolve?
 
-## Demonstração
+Restaurantes perdem tempo (e clientes) com atendimento manual via WhatsApp. Esse chatbot simula o atendimento completo de um restaurante — do cardápio à confirmação do pedido — de forma automática, guiado por IA e com memória de conversa.
 
-![Demonstração do Vic & Joa respondendo no WhatsApp](./demo.gif)
+## ✅ O que você consegue fazer
 
-## Como funciona
+- Consultar o cardápio e escolher o prato direto pelo WhatsApp
+- Escolher entre delivery ou retirada
+- Definir a forma de pagamento e confirmar o pedido
+- Manter uma conversa natural, com a IA lembrando o contexto do atendimento
+
+## 📱 Demonstração
+
+![Demonstração do Vic & Jão respondendo no WhatsApp](./demo.gif)
+
+## 🔄 Fluxo da automação
 
 1. Cliente envia mensagem no WhatsApp
 2. Webhook do n8n recebe via Evolution API
@@ -17,11 +26,9 @@ Chatbot de atendimento automatizado para restaurante, simulando o fluxo completo
 5. A resposta é enviada de volta ao cliente pelo WhatsApp
 6. Cada interação é registrada automaticamente numa planilha do Google Sheets (data/hora, telefone, mensagem, resposta)
 
-## Fluxo no n8n
-
 ![Fluxo completo do workflow no n8n](./fluxo-n8n.png)
 
-## Stack utilizada
+## 🛠️ Tecnologias utilizadas
 
 - **n8n** — orquestração do fluxo de atendimento
 - **Evolution API** — integração com WhatsApp (Docker)
@@ -29,7 +36,22 @@ Chatbot de atendimento automatizado para restaurante, simulando o fluxo completo
 - **Google Sheets API** — registro de conversas e fonte de histórico
 - **Docker Compose** — containerização do Evolution API
 
-## Como rodar localmente
+## 📁 Estrutura do repositório
+
+```
+vic-e-jao-whatsapp-bot/
+├── README.md
+├── LICENSE
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── demo.gif
+├── fluxo-n8n.png
+└── n8n-workflows/
+    └── vic-e-jao-whatsapp-bot.json   # workflow exportado do n8n
+```
+
+## 🚀 Como usar
 
 ### Pré-requisitos
 - Docker e Docker Compose instalados
@@ -63,13 +85,13 @@ npx n8n start
 5. Importe o workflow
 - Acesse `http://localhost:5678`
 - Vá em Workflows → Import from File
-- Selecione `n8n-workflows/Vic_e_Joa_com_memoria.json`
+- Selecione [`n8n-workflows/vic-e-jao-whatsapp-bot.json`](./n8n-workflows/vic-e-jao-whatsapp-bot.json)
 - Configure suas próprias credenciais (Groq, Evolution API, Google Sheets) dentro do n8n
 
-## Autor
+## 👨‍💻 Autor
 
-João Vitor Torres de Miranda
+João Vitor — [github.com/jvtdemiranda](https://github.com/jvtdemiranda)
 
-## Licença
+## 📜 Licença
 
 Distribuído sob a licença MIT. Veja [LICENSE](./LICENSE) para mais detalhes.
