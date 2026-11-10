@@ -1,0 +1,16 @@
+{
+  "name": "vic-e-jao-whatsapp-bot",
+  "version": "2.0.0",
+  "description": "Chatbot de atendimento de restaurante com IA — demo web estilo WhatsApp + workflow n8n original",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}

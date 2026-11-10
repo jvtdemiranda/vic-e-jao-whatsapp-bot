@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Vic &amp; Jão — Chatbot com IA</title>
+    <meta
+      name="description"
+      content="Demo do chatbot de atendimento do restaurante Vic & Jão: cardápio, delivery, pagamento e confirmação de pedido conduzidos por IA."
+    />
+    <meta property="og:title" content="Vic & Jão — Chatbot de atendimento com IA" />
+    <meta property="og:description" content="Converse com o Camarão, atendente virtual do restaurante, e faça um pedido de teste." />
+    <meta name="theme-color" content="#075e54" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="about" aria-labelledby="about-title">
+        <p class="eyebrow">Projeto de portfólio · Automação com IA</p>
+        <h1 id="about-title">Vic &amp; Jão <span aria-hidden="true">🦐</span></h1>
+        <p class="lead">
+          Chatbot de atendimento para restaurante: mostra o cardápio, recebe o pedido, pergunta entrega ou retirada,
+          gera o Pix e confirma — tudo em uma conversa natural, com memória do contexto.
+        </p>
+
+        <div class="try">
+          <strong>Experimente:</strong> mande um <em>“oi”</em> no chat e faça um pedido de teste. Nenhum pedido ou
+          pagamento é real.
+        </div>
+
+        <h2>Como funciona</h2>
+        <ol class="steps">
+          <li><span>1</span>O cliente manda mensagem (aqui no navegador ou no WhatsApp).</li>
+          <li><span>2</span>O backend junta a mensagem com o histórico recente da conversa.</li>
+          <li><span>3</span>Um LLM (LLaMA 3.3 70B via Groq) responde seguindo o roteiro de atendimento do prompt.</li>
+          <li><span>4</span>A resposta volta formatada no estilo WhatsApp (*negrito*, emojis, quebras de linha).</li>
+        </ol>
+
+        <h2>Tecnologias</h2>
+        <ul class="chips" aria-label="Tecnologias">
+          <li>n8n</li>
+          <li>Evolution API</li>
+          <li>Groq · LLaMA 3.3</li>
+          <li>Google Sheets</li>
+          <li>Node.js</li>
+          <li>Vercel Functions</li>
+          <li>Docker</li>
+        </ul>
+
+        <p class="links">
+          <a href="https://github.com/jvtdemiranda/vic-e-jao-whatsapp-bot" target="_blank" rel="noopener">Código no GitHub ↗</a>
+          <a
+            href="https://github.com/jvtdemiranda/vic-e-jao-whatsapp-bot/blob/main/n8n-workflows/vic-e-jao-whatsapp-bot.json"
+            target="_blank"
+            rel="noopener"
+            >Workflow n8n original ↗</a
+          >
+        </p>
+        <p class="credit">Feito por <a href="https://github.com/jvtdemiranda" target="_blank" rel="noopener">João Vitor</a></p>
+      </section>
+
+      <section class="phone" aria-label="Conversa com o atendente virtual">
+        <header class="chat-header">
+          <div class="avatar" aria-hidden="true">🦐</div>
+          <div class="contact">
+            <strong>Vic &amp; Jão Restaurante</strong>
+            <span id="status" class="status">online</span>
+          </div>
+          <button id="reset" class="icon-btn" type="button" title="Recomeçar conversa" aria-label="Recomeçar conversa">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <div id="messages" class="messages" role="log" aria-live="polite" aria-relevant="additions">
+          <p class="notice">🔒 Demonstração: as respostas são geradas por IA e nenhum pedido é real.</p>
+        </div>
+
+        <div class="composer">
+          <div id="suggestions" class="suggestions" aria-label="Sugestões de mensagem"></div>
+          <form id="form" class="input-row" autocomplete="off">
+            <label class="sr-only" for="input">Mensagem</label>
+            <input id="input" type="text" placeholder="Mensagem" maxlength="500" enterkeyhint="send" />
+            <button id="send" class="send-btn" type="submit" aria-label="Enviar">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <path fill="currentColor" d="M2 21 23 12 2 3v7l15 2-15 2z" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
