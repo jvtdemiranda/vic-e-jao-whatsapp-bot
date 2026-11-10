@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![n8n](https://img.shields.io/badge/n8n-workflow-orange.svg) ![WhatsApp](https://img.shields.io/badge/WhatsApp-Evolution%20API-25D366.svg) ![Groq](https://img.shields.io/badge/IA-Groq%20%C2%B7%20LLaMA%203.3-f55036.svg) ![Vercel](https://img.shields.io/badge/deploy-Vercel-black.svg)
 
-> 🔗 **Demo ao vivo:** https://SEU-PROJETO.vercel.app — converse com o bot direto no navegador, sem precisar de WhatsApp.
+> 🔗 **Demo ao vivo:** [vic-e-jao-whatsapp-bot.vercel.app](https://vic-e-jao-whatsapp-bot.vercel.app) — converse com o bot direto no navegador, sem precisar de WhatsApp.
 
 ## 💡 Qual problema resolve?
 
@@ -125,7 +125,7 @@ npm test
 1. Crie uma chave gratuita em [console.groq.com/keys](https://console.groq.com/keys)
 2. Na Vercel, importe este repositório (Add New → Project). Não precisa configurar build: a Vercel serve a pasta `public/` e a função `api/chat.js`
 3. Em *Settings → Environment Variables*, adicione `GROQ_API_KEY` (e, se quiser, `GROQ_MODEL` para trocar o modelo)
-4. Faça o deploy e coloque o link no topo deste README e no seu portfólio
+4. Faça o deploy a partir da branch `main` (é ela que vira produção) e coloque o link no seu portfólio
 
 ### Opção 2 — Versão original no WhatsApp (n8n)
 
